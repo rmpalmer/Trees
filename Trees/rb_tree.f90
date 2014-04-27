@@ -109,7 +109,7 @@ function split(value, gg, g, f, x) result(split_ptr)
     x%right%red = .false.
     if (f%red) then
         g%red = .true.
-        if ((value<g%value) .eqv. (value<f%value)) f => rotate(value, g)
+        if ((value<g%value) .neqv. (value<f%value)) f => rotate(value, g)
         x => rotate(value, gg)
         x%red = .false.
     end if
