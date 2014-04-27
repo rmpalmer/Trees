@@ -33,6 +33,6 @@ program main
     !
     call binary_print(b%head)
     !
-    write (*,'(''Goodbye'')')
+    write (*,'(''Goodbye from Tree Test'')')
 
 end program main
