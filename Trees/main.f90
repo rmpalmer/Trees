@@ -40,12 +40,12 @@ program main
     !
     call binary_print(b%head)
     !
- !   call rb_init(rb)
- !   do i=1,size(vals)
- !       write(*,'(''insert '',i4,i8,'' into rb tree'')') i,vals(i)
- !       rb_result => rb_insert(vals(i), rb)
- !   end do
- !   call rb_print(rb%head)
+    call rb_init(rb)
+    do i=1,size(vals)
+        write(*,'(''insert '',i4,i8,'' into rb tree'')') i,vals(i)
+        rb_result => rb_insert(vals(i), rb)
+    end do
+    call rb_print(rb%head)
     !
     write (*,'(''Goodbye from Tree Test'')')
 

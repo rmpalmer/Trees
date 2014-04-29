@@ -1,4 +1,8 @@
 module rb_tree
+
+    !
+    ! based on pascal language implementation from Sedgewick, Chapter 15
+    !
     implicit none
 
     private
@@ -12,6 +16,7 @@ module rb_tree
 
     type :: tree
         type(node), pointer :: head
+        type(node), pointer :: z
         integer :: count
     end type tree
 
@@ -23,7 +28,11 @@ subroutine init(t)
     !
     type(tree), intent(inout) :: t
     !
-    nullify(t%head)
+    allocate(t%head)
+    allocate(t%z)
+    t%head%value = 0
+    t%head%right => t%z
+    t%head%left => t%z
     t%count = 0
     !
 end subroutine init
@@ -37,7 +46,7 @@ function insert(value, t) result(inserted_ptr)
     type(node), pointer :: x
     !
     x => t%head
-    inserted_ptr => insert_node(value, x)
+    inserted_ptr => insert_node(t,value, x)
     if (.not. associated(t%head)) t%head => x
     !
 end function insert
@@ -55,8 +64,9 @@ function search(value, t) result(found_ptr)
     !
 end function search
 
-function insert_node(value, x) result(inserted_ptr)
+function insert_node(t, value, x) result(inserted_ptr)
     !
+    type(tree), intent(in) :: t
     integer, intent(in) :: value
     type(node), pointer, intent(inout) :: x
     !
@@ -70,20 +80,44 @@ function insert_node(value, x) result(inserted_ptr)
         f => x
         g => x
     end if
-    do while (associated(x))
+    do
+        write(*,*) 'top of do loop'
         gg => g
         g => f
         f => x
         if (value < x%value) then
+            write(*,*) 'replacing x with x%left'
             x => x%left
         else
+            write(*,*) 'replacing x with x%right'
             x => x%right
         end if
+
+        if (associated(t%z%left)) then
+            write(*,*) 'z left is associated'
+        else
+            write(*,*) 'z left not associated'
+        end if
+
+        if (associated(x%left)) then
+            write(*,*) 'x left associated'
+        else
+            write(*,*) 'x left not associated'
+        endif
+
+        if (associated(x%right)) then
+            write(*,*) 'x right associated'
+        else
+            write(*,*) 'x right not associated'
+        endif
+
         if (x%left%red .and. x%right%red) x => split(value, gg, g, f, x)
+        if (associated(x, target=t%z)) exit
     end do
+
     allocate(x)
-    nullify(x%left)
-    nullify(x%right)
+    x%left => t%z
+    x%right => t%z
     x%value = value
     if (associated(f)) then
         if (value < f%value) then
