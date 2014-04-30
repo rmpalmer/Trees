@@ -210,17 +210,24 @@ function search_node(value, start) result(found_ptr)
     !
 end function search_node
 
-recursive subroutine print(x)
+subroutine print(t)
+    type(tree), intent(in) :: t
+    call print_node(t%head, t%z)
+end subroutine print
+
+recursive subroutine print_node(x,z)
     !
     type(node), pointer, intent(in) :: x
+    type(node), pointer, intent(in) :: z
     !
-    if (associated(x)) then
-        call print(x%left)
+    if (associated(x, target=z)) return
+    call print_node(x%left,z)
+    if ((x%value) /= (z%value)) then
         write (*,'(I0)') x%value
-        call print(x%right)
     end if
+    call print_node(x%right,z)
     !
-end subroutine print
+end subroutine print_node
 
 
 end module rb_tree

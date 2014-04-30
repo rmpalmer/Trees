@@ -15,8 +15,8 @@ program main
     type(rb_node), pointer :: rb_result
 
     integer :: i
-    integer, dimension(10) :: vals
-    real, dimension(10) :: r
+    integer, dimension(100) :: vals
+    real, dimension(100) :: r
 
     write (*,'(''Hello from Tree Test'')')
     call random_number(r)
@@ -45,7 +45,7 @@ program main
         write(*,'(''insert '',i4,i8,'' into rb tree'')') i,vals(i)
         rb_result => rb_insert(vals(i), rb)
     end do
-    call rb_print(rb%head)
+    call rb_print(rb)
     !
     write (*,'(''Goodbye from Tree Test'')')
 
