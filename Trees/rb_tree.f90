@@ -12,6 +12,10 @@ module rb_tree
         type(node), pointer :: left
         type(node), pointer :: right
         logical :: red
+    contains
+        procedure,nopass :: new_node
+        procedure,pass   :: right_red
+        procedure,pass   :: left_red
     end type node
 
     type :: tree
@@ -24,12 +28,34 @@ module rb_tree
 
 contains
 
+function new_node()
+    type(node), pointer :: new_node
+    allocate(new_node)
+    new_node%red = .false.
+    nullify(new_node%left)
+    nullify(new_node%right)
+end function new_node
+
+function right_red(this)
+    class(node), intent(in) :: this
+    logical :: right_red
+    right_red = .false.
+    right_red = (associated(this%right) .and. this%right%red)
+end function right_red
+
+function left_red(this)
+    class(node), intent(in) :: this
+    logical :: left_red
+    left_red = .false.
+    left_red = (associated(this%left) .and. this%left%red)
+end function left_red
+
 subroutine init(t)
     !
     type(tree), intent(inout) :: t
     !
-    allocate(t%head)
-    allocate(t%z)
+    t%head => new_node()
+    t%z    => new_node()
     t%head%value = 0
     t%head%right => t%z
     t%head%left => t%z
@@ -81,37 +107,16 @@ function insert_node(t, value, x) result(inserted_ptr)
         g => x
     end if
     do
-        write(*,*) 'top of do loop'
         gg => g
         g => f
         f => x
         if (value < x%value) then
-            write(*,*) 'replacing x with x%left'
             x => x%left
         else
-            write(*,*) 'replacing x with x%right'
             x => x%right
         end if
 
-        if (associated(t%z%left)) then
-            write(*,*) 'z left is associated'
-        else
-            write(*,*) 'z left not associated'
-        end if
-
-        if (associated(x%left)) then
-            write(*,*) 'x left associated'
-        else
-            write(*,*) 'x left not associated'
-        endif
-
-        if (associated(x%right)) then
-            write(*,*) 'x right associated'
-        else
-            write(*,*) 'x right not associated'
-        endif
-
-        if (x%left%red .and. x%right%red) x => split(value, gg, g, f, x)
+        if (x%left_red() .and. x%right_red()) x => split(value, gg, g, f, x)
         if (associated(x, target=t%z)) exit
     end do
 

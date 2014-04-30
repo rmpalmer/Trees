@@ -15,8 +15,8 @@ program main
     type(rb_node), pointer :: rb_result
 
     integer :: i
-    integer, dimension(100) :: vals
-    real, dimension(100) :: r
+    integer, dimension(10) :: vals
+    real, dimension(10) :: r
 
     write (*,'(''Hello from Tree Test'')')
     call random_number(r)
