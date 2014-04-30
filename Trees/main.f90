@@ -29,14 +29,6 @@ program main
     do i=1,size(vals)
         bin_result => binary_insert(vals(i), b)
     end do
-!    do i=1,size(vals)
-!        bin_result => binary_search(vals(i), b)
-!        if (associated(bin_result)) then
-!            write (*,'(''found '',i4)') bin_result%value
-!        else
-!            write (*,'(''did not find '',i4)') vals(i)
-!        end if
-!    end do
     !
     call binary_print(b%head)
     !
