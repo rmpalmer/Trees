@@ -20,7 +20,7 @@ program main
 
     write (*,'(''Hello from Tree Test'')')
     call random_number(r)
-    vals = nint(10000.0 * r)
+    vals = nint(10000.0 * r) - 5000
     do i=1,size(vals)
         write (*,'(F12.2,1X,I4)') r(i), vals(i)
     end do
@@ -36,6 +36,7 @@ program main
     do i=1,size(vals)
         write(*,'(''insert '',i4,i8,'' into rb tree'')') i,vals(i)
         rb_result => rb_insert(vals(i), rb)
+        write(*,'('' inserted '',i8)') rb_result%value
     end do
     call rb_print(rb)
     !
