@@ -15,14 +15,14 @@ program main
     type(rb_node), pointer :: rb_result
 
     integer :: i
-    integer, dimension(100) :: vals
-    real, dimension(100) :: r
+    integer, dimension(10) :: vals
+    real, dimension(10) :: r
 
     write (*,'(''Hello from Tree Test'')')
     call random_number(r)
     vals = nint(10000.0 * r) - 5000
     do i=1,size(vals)
-        write (*,'(F12.2,1X,I4)') r(i), vals(i)
+        write (*,'(F12.2,1X,I6)') r(i), vals(i)
     end do
     !
     call binary_init(b)

@@ -92,7 +92,7 @@ end function search
 
 function insert_node(t, value, x) result(inserted_ptr)
     !
-    type(tree), intent(in) :: t
+    type(tree), intent(inout) :: t
     integer, intent(in) :: value
     type(node), pointer, intent(inout) :: x
     !
@@ -124,6 +124,7 @@ function insert_node(t, value, x) result(inserted_ptr)
     x%left => t%z
     x%right => t%z
     x%value = value
+    t%count = t%count + 1
     if (associated(f)) then
         if (value < f%value) then
             f%left => x
@@ -212,6 +213,7 @@ end function search_node
 
 subroutine print(t)
     type(tree), intent(in) :: t
+    write (*,'(''tree has '',I8,'' nodes'')') t%count
     call print_node(t%head, t%z)
 end subroutine print
 
@@ -220,11 +222,18 @@ recursive subroutine print_node(x,z)
     type(node), pointer, intent(in) :: x
     type(node), pointer, intent(in) :: z
     !
-    if (associated(x, target=z)) return
+    if (associated(x, target=z)) then
+        write (*,'(''print_node found node associated with zero'')')
+        return
+    end if
+    !write (*,'(''going left'')')
     call print_node(x%left,z)
     if ((x%value) /= (z%value)) then
         write (*,'(I0)') x%value
+    else
+        write (*,'(''node has zero value'')')
     end if
+    !write (*,'(''going right'')')
     call print_node(x%right,z)
     !
 end subroutine print_node
